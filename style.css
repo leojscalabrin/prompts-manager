@@ -3,6 +3,7 @@
   --accent-600: #4863f7;
   --accent-500: #7878d7;
   --alert-600: #ff5c5c;
+  --alert-800: rgba(255, 92, 92, 0.08);
   --gray-900: #0d0d0d;
   --gray-800: #111111;
   --gray-700: #1a1a1a;
@@ -110,6 +111,12 @@ body, input, button {
   font-size: 32px;
   font-weight: 600;
   outline: none;
+}
+
+.prompt-line {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 }
 
 .prompt-content {
@@ -223,4 +230,61 @@ body, input, button {
 .btn-full {
   width: 100%;
   justify-content: center;
+}
+
+.prompt-item {
+  display: flex;
+  flex-direction: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.prompt-item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.prompt-item-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.prompt-item-description {
+  font-size: 14px;
+  color: var(--gray-100);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;  
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s;
+  height: 32px;
+  width: 32px;
+}
+
+.btn-icon:hover {
+  background: var(--alert-800);
+}
+
+.icon-trash {
+  width: 20px;
+  height: 20px;
 }
