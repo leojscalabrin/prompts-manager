@@ -16,7 +16,8 @@ const elements = {
   btnSave: document.getElementById("btn-save"),
   list: document.getElementById("prompt-list"),
   search: document.getElementById("search-input"),
-  btnNew: document.getElementById("btn-new")
+  btnNew: document.getElementById("btn-new"),
+  btnCopy: document.getElementById("btn-copy")
 };
 
 // Sidebar elements
@@ -25,6 +26,10 @@ const sidebar = document.querySelector(".sidebar");
 function openSidebar() {
   elements.sidebar.style.display = "flex";
   elements.btnOpen.style.display = "none";
+
+  if (window.innerWidth < 1024) {
+    elements.sidebar.style.transform = "translateX(0)";
+  }
 }
 
 function collapseSidebar() {
@@ -74,8 +79,8 @@ function save() {
       title,
       content,
     };
-    console.log("Adicionando novo prompt:", newPrompt); // Log para depurar
-    state.prompts.unshift(newPrompt); // Adiciona no início da lista
+    console.log("Adicionando novo prompt:", newPrompt);
+    state.prompts.unshift(newPrompt);
     state.selectedId = newPrompt.id;
   }
 
@@ -107,6 +112,7 @@ function createPromptItem(prompt) {
     console.error("Prompt com ID inválido:", prompt);
     prompt.id = Date.now().toString(36);
   }
+
   const html = `
     <li class="prompt-line" data-id="${prompt.id}" data-action="select" style="pointer-events: auto; position: relative;">
       <div class="prompt-item-content">
@@ -118,7 +124,6 @@ function createPromptItem(prompt) {
       </button>
     </li>
   `;
-  console.log("HTML gerado por createPromptItem:", html);
   return html;
 }
 
@@ -128,7 +133,7 @@ function renderList(filterText = "") {
     prompt.title.toLowerCase().includes(filterText.toLowerCase())
   ).map((p) => createPromptItem(p)).join("");
   
-  elements.list.innerHTML = filteredPrompts; // Reescreve toda a lista
+  elements.list.innerHTML = filteredPrompts;
 }
 
 
@@ -140,9 +145,26 @@ function newPrompt() {
   elements.promptTitle.focus();
 }
 
+function copySelected() {
+  try {
+    const content = elements.promptContent
+
+    if (!navigator.clipboard) {
+      console.error("Clipboard API não suportada neste ambiente.")
+      return
+    }
+
+    navigator.clipboard.writeText(content.innerText)
+    alert("Copiado para a área de transferência!")
+  } catch (error) {
+    console.log("Error trying to copy: ", error)
+  }
+}
+
 //Eventos
 elements.btnSave.addEventListener("click", save);
 elements.btnNew.addEventListener("click", newPrompt);
+elements.btnCopy.addEventListener("click", copySelected);
 
 elements.search.addEventListener("input", function(event) {
   renderList(event.target.value);
@@ -152,7 +174,6 @@ elements.list.addEventListener("click", function(event) {
   const removeBtn = event.target.closest("button[data-action='remove']");
   let item = event.target.closest("li");
 
-  // Se item for null e removeBtn existir, tente encontrar o <li> a partir do removeBtn
   if (!item && removeBtn) {
     item = removeBtn.closest("li");
   }
@@ -176,7 +197,6 @@ elements.list.addEventListener("click", function(event) {
     return;
   }
 
-  // Verifique o data-action manualmente em vez de usar closest
   if (item.getAttribute("data-action") === "select") {
     const prompt = state.prompts.find(p => p.id === id);
 
@@ -197,9 +217,6 @@ function init() {
   renderList("");
   attachAllEditableHandlers();
   updateAllEditableStates();
-
-  elements.sidebar.style.display = "";
-  elements.btnOpen.style.display = "none";
 
   elements.btnOpen.addEventListener("click", openSidebar);
   elements.btnCollapse.addEventListener("click", collapseSidebar);

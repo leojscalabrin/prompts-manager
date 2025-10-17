@@ -165,7 +165,7 @@ body, input, button {
   position: absolute;
   top: 62px;
   left: 62px;
-  display: none;
+
 }
 
 .sidebar {
@@ -287,4 +287,35 @@ body, input, button {
 .icon-trash {
   width: 20px;
   height: 20px;
+}
+
+@media (max-width: 1024px){
+  .open-toggle {
+    display: block;
+    z-index: 0;
+    top: 38px;
+    left: 38px;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 80%;
+    max-width: 360px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 333;
+  }
+
+  .sidebar.open {
+    transform: translate(0);
+  }
+
+  .main {
+    padding: 24px 32px;
+    margin-left: 0;
+    overflow-y: auto;
+  }
 }
